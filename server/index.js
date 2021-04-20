@@ -34,6 +34,15 @@ app.get("/api/users/", async (req, res) => {
 
 	res.send(users);
 });
+app.get("/api/users/:id", async (req, res) => {
+	const userId = req.params.id;
+	const user = await User.findById(
+		userId,
+		"fName lName _id posts bio username"
+	).populate("posts");
+
+	res.send(user);
+});
 app.post("/api/posts/", async (req, res) => {
 	const newPost = new Post(req.body);
 	await newPost.save();
@@ -44,6 +53,15 @@ app.get("/api/posts/", async (req, res) => {
 	const posts = await Post.find({}).populate("author", "fName lName _id");
 
 	res.send(posts);
+});
+app.get("/api/posts/:id", async (req, res) => {
+	const postId = req.params.id;
+	const post = await Post.findById(postId).populate(
+		"author",
+		"fName lName _id"
+	);
+
+	res.send(post);
 });
 
 app.listen(port, () => {
