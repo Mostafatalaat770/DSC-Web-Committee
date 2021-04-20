@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const User = require("./models/user");
 const port = 3000;
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const app = express();
 app.use(cors());
@@ -20,7 +22,8 @@ app.get("/", (req, res) => {
 	res.send("Hello World!");
 });
 app.post("/api/users/", async (req, res) => {
-	const newUser = new User(req.body);
+	const userPassword = await bcrypt.hash(req.body.password, saltRounds);
+	const newUser = new User({ ...req.body, password: userPassword });
 	await newUser.save();
 
 	res.send("User created!");
