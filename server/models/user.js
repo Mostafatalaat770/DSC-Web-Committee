@@ -9,4 +9,4 @@ const schema = new mongoose.Schema({
 	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
 	bio: "string",
 });
-export const User = mongoose.model("User", schema);
+module.exports = mongoose.model("User", schema);

@@ -6,4 +6,4 @@ const schema = new mongoose.Schema({
 	likes: "number",
 	comments: [{ type: "string" }],
 });
-export const Post = mongoose.model("Post", schema);
+module.exports = mongoose.model("Post", schema);
