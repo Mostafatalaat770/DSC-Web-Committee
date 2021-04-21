@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const User = require("./models/user");
 const Post = require("./models/post");
+const Comment = require("./models/comment");
 const port = 3000;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -56,12 +57,17 @@ app.get("/api/posts/", async (req, res) => {
 });
 app.get("/api/posts/:id", async (req, res) => {
 	const postId = req.params.id;
-	const post = await Post.findById(postId).populate(
-		"author",
-		"fName lName _id"
-	);
+	const post = await Post.findById(postId)
+		.populate("author", "fName lName _id")
+		.populate("comments");
 
 	res.send(post);
+});
+app.post("/api/comments/", async (req, res) => {
+	const newComment = new Comment(req.body);
+	await newComment.save();
+
+	res.send("Comment created!");
 });
 
 app.listen(port, () => {
